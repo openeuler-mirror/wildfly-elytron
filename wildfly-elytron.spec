@@ -3,7 +3,7 @@
 
 Name:                wildfly-elytron
 Version:             1.0.2
-Release:             1
+Release:             2
 Summary:             Security, Authentication, and Authorization SPIs for the WildFly project
 License:             ASL 2.0 and LGPLv2+
 URL:                 http://wildfly.org/
@@ -54,5 +54,8 @@ This package contains javadoc for %{name}.
 %license LICENSE.txt
 
 %changelog
+* Fri Dec 24 2021 wangkai <wangkai385@huawei.com> - 1.0.2-2
+- This package depends on log4j.After the log4j vulnerability CVE-2021-45105 is fixed,the version needs to be rebuild.
+
 * Mon Aug 17 2020 maminjie <maminjie1@huawei.com> - 1.0.2-1
 - package init
