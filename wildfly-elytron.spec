@@ -2,24 +2,15 @@
 %global namedversion %{version}%{?namedreltag}
 
 Name:                wildfly-elytron
-Version:             1.0.2
+Version:             1.2.0
 Release:             1
 Summary:             Security, Authentication, and Authorization SPIs for the WildFly project
 License:             ASL 2.0 and LGPLv2+
 URL:                 http://wildfly.org/
-Source0:             https://github.com/wildfly-security/wildfly-elytron/archive/%{namedversion}.tar.gz
-
-BuildRequires:       graphviz maven-local mvn(jdepend:jdepend) mvn(junit:junit)
-BuildRequires:       mvn(org.jboss:jboss-parent:pom:) mvn(org.jboss.apiviz:apiviz)
-BuildRequires:       mvn(org.jboss.logging:jboss-logging)
-BuildRequires:       mvn(org.jboss.logging:jboss-logging-annotations)
-BuildRequires:       mvn(org.jboss.logging:jboss-logging-processor)
-BuildRequires:       mvn(org.jboss.logmanager:jboss-logmanager)
-BuildRequires:       mvn(org.jboss.logmanager:log4j-jboss-logmanager)
-BuildRequires:       mvn(org.jboss.modules:jboss-modules)
-BuildRequires:       mvn(org.jboss.slf4j:slf4j-jboss-logmanager)
-BuildRequires:       mvn(org.kohsuke.metainf-services:metainf-services)
-BuildRequires:       mvn(org.wildfly.common:wildfly-common)
+Source0:             https://github.com/wildfly-security/wildfly-elytron/archive/refs/tags/%{namedversion}.tar.gz
+Source1:             xmvn-reactor
+Patch0:              0001-ignore-crlBlank-test.patch
+BuildRequires:       maven-local java-1.8.0-openjdk-devel maven
 BuildArch:           noarch
 
 %description
@@ -37,11 +28,19 @@ This package contains javadoc for %{name}.
 
 %prep
 %setup -q -n %{name}-%{namedversion}
+%patch0 -p1
+
+cp %{SOURCE1} ./.xmvn-reactor
+echo `pwd` > absolute_prefix.log
+sed -i 's/\//\\\//g' absolute_prefix.log
+absolute_prefix=`head -n 1 absolute_prefix.log`
+sed -i 's/absolute-prefix/'"$absolute_prefix"'/g' .xmvn-reactor
+
 %pom_remove_plugin :maven-checkstyle-plugin
 %mvn_file org.wildfly.security:%{name} %{name}
 
 %build
-%mvn_build
+mvn package verify org.apache.maven.plugins:maven-javadoc-plugin:aggregate
 
 %install
 %mvn_install
@@ -50,9 +49,13 @@ This package contains javadoc for %{name}.
 %doc README.md
 %license LICENSE.txt
 
-%files javadoc -f .mfiles-javadoc
+%files javadoc 
+/usr/share/javadoc/wildfly-elytron
 %license LICENSE.txt
 
 %changelog
+* Fri Jun 24 2022 Ge Wang <wangge20@h-partners.com> - 1.2.0-1
+- upgrade to version 1.2.0
+
 * Mon Aug 17 2020 maminjie <maminjie1@huawei.com> - 1.0.2-1
 - package init

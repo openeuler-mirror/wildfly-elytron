@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://fedorahosted.org/xmvn/METADATA/3.0.0">
+  <artifacts>
+    <artifact>
+      <groupId>org.wildfly.security</groupId>
+      <artifactId>wildfly-elytron</artifactId>
+      <version>1.2.0.Final</version>
+      <path>absolute-prefix/target/wildfly-elytron-1.2.0.Final.jar</path>
+      <properties>
+        <type>jar</type>
+        <requiresJava>1.8</requiresJava>
+      </properties>
+    </artifact>
+    <artifact>
+      <groupId>org.wildfly.security</groupId>
+      <artifactId>wildfly-elytron</artifactId>
+      <extension>pom</extension>
+      <version>1.2.0.Final</version>
+      <path>absolute-prefix/pom.xml</path>
+      <properties>
+        <type>jar</type>
+        <requiresJava>1.8</requiresJava>
+      </properties>
+    </artifact>
+    <artifact>
+      <groupId>org.wildfly.security</groupId>
+      <artifactId>wildfly-elytron</artifactId>
+      <classifier>sources</classifier>
+      <version>1.2.0.Final</version>
+      <path>absolute-prefix/target/wildfly-elytron-1.2.0.Final-sources.jar</path>
+      <properties>
+        <type>jar</type>
+        <requiresJava>1.8</requiresJava>
+      </properties>
+    </artifact>
+  </artifacts>
+</metadata>
