@@ -3,13 +3,15 @@
 
 Name:                wildfly-elytron
 Version:             1.2.0
-Release:             1
+Release:             2
 Summary:             Security, Authentication, and Authorization SPIs for the WildFly project
 License:             ASL 2.0 and LGPLv2+
 URL:                 http://wildfly.org/
 Source0:             https://github.com/wildfly-security/wildfly-elytron/archive/refs/tags/%{namedversion}.tar.gz
 Source1:             xmvn-reactor
+Source2:             maven-enforcer-plugin-3.0.0-M1.tar.gz
 Patch0:              0001-ignore-crlBlank-test.patch
+Patch1:              increase_timeout.patch
 BuildRequires:       maven-local java-1.8.0-openjdk-devel maven
 BuildArch:           noarch
 
@@ -29,6 +31,7 @@ This package contains javadoc for %{name}.
 %prep
 %setup -q -n %{name}-%{namedversion}
 %patch0 -p1
+%patch1 -p1
 
 cp %{SOURCE1} ./.xmvn-reactor
 echo `pwd` > absolute_prefix.log
@@ -38,6 +41,9 @@ sed -i 's/absolute-prefix/'"$absolute_prefix"'/g' .xmvn-reactor
 
 %pom_remove_plugin :maven-checkstyle-plugin
 %mvn_file org.wildfly.security:%{name} %{name}
+
+mkdir -p /home/abuild/.m2/repository/org/apache/maven/plugins/maven-enforcer-plugin
+tar -mxf %{SOURCE2} -C /home/abuild/.m2/repository/org/apache/maven/plugins/maven-enforcer-plugin/
 
 %build
 mvn package verify org.apache.maven.plugins:maven-javadoc-plugin:aggregate
@@ -54,6 +60,9 @@ mvn package verify org.apache.maven.plugins:maven-javadoc-plugin:aggregate
 %license LICENSE.txt
 
 %changelog
+* Fri Sep 9 2022 lvxiaoqian<xiaoqian@nj.iscas.ac.cn> - 1.2.0-2
+- increase test timeout
+
 * Fri Jun 24 2022 Ge Wang <wangge20@h-partners.com> - 1.2.0-1
 - upgrade to version 1.2.0
 
